@@ -21,7 +21,6 @@ module.exports.login = (req, res, next) => {
       const token = jwt.sign({ _id: user._id }, secret, { expiresIn: '7d' });
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
-        domain: '.mesto.wardenclock.nomoredomains.xyz',
         httpOnly: true,
         sameSite: true,
       });
@@ -38,7 +37,6 @@ module.exports.logout = (req, res, next) => {
       } else {
         res.cookie('jwt', '', {
           expires: new Date(0),
-          domain: '.mesto.wardenclock.nomoredomains.xyz',
           httpOnly: true,
           sameSite: true,
         });
