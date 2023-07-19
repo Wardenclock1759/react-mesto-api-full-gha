@@ -21,7 +21,7 @@ module.exports.login = (req, res, next) => {
       res.cookie('jwt', token, {
         maxAge: 3600000 * 24 * 7,
         domain: '.mesto.wardenclock.nomoredomains.xyz',
-        httpOnly: true,
+        httpOnly: false,
         sameSite: true,
       });
       res.send({ message: AUTHENTICATED });
