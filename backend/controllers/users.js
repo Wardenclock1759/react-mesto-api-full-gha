@@ -7,6 +7,7 @@ const NotFoundError = require('../errors/not-found-error');
 const {
   STATUS_CREATED,
   AUTHENTICATED,
+  LOGOUT,
 } = require('../constants');
 
 const NOT_FOUND_MESSAGE = 'Пользователь по указанному _id не найден.';
@@ -25,6 +26,24 @@ module.exports.login = (req, res, next) => {
         sameSite: true,
       });
       res.send({ message: AUTHENTICATED });
+    })
+    .catch(next);
+};
+
+module.exports.logout = (req, res, next) => {
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFoundError(NOT_FOUND_MESSAGE);
+      } else {
+        res.cookie('jwt', '', {
+          expires: new Date(0),
+          domain: '.mesto.wardenclock.nomoredomains.xyz',
+          httpOnly: true,
+          sameSite: true,
+        });
+        res.status(200).send({ message: LOGOUT });
+      }
     })
     .catch(next);
 };

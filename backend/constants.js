@@ -1,6 +1,7 @@
 module.exports.STATUS_CREATED = 201;
 
 module.exports.AUTHENTICATED = 'Авторизация прошла успешно';
+module.exports.LOGOUT = 'Выход из сервиса';
 module.exports.FORBITTEN_MESSAGE = 'У вас нет прав для модификации этой карточки';
 module.exports.NOT_FOUND_MESSAGE = 'По вашему запросу ничего не найдено';
 

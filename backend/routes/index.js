@@ -3,7 +3,7 @@ const { celebrate, Joi } = require('celebrate');
 const isURL = require('validator/lib/isURL');
 const auth = require('../middlewares/auth');
 const {
-  login, createUser,
+  login, createUser, logout,
 } = require('../controllers/users');
 
 const userRouter = require('./users');
@@ -31,6 +31,8 @@ router.post('/signup', celebrate({
 }), createUser);
 
 router.use(auth);
+
+router.get('/logout', logout);
 
 router.use('/users', userRouter);
 router.use('/cards', cardRouter);
