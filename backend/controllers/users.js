@@ -22,6 +22,7 @@ module.exports.login = (req, res, next) => {
         maxAge: 3600000 * 24 * 10,
         httpOnly: false,
         sameSite: true,
+        domain: 'mesto.wardenclock.nomoredomains.xyz',
       });
       res.send({ message: AUTHENTICATED });
     })
