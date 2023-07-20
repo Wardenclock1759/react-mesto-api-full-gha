@@ -2,8 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
-const helmet = require('helmet');
-
 const { PORT, MONGO_URL } = require('./config');
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
@@ -27,7 +25,6 @@ mongoose.connect(MONGO_URL, {
 });
 
 app.use(limiter);
-app.use(helmet);
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
