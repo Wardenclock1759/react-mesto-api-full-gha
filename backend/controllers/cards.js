@@ -12,7 +12,10 @@ const NOT_FOUND_MESSAGE = 'Карточка с указанным _id не на�
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate('owner')
-    .then((cards) => res.send({ cards }))
+    .then((cards) => {
+      cards.reverse();
+      res.send({ cards });
+    })
     .catch(next);
 };
 
