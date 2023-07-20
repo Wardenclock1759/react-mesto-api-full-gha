@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
+const BadRequestError = require('../errors/bad-request');
 
 const {
   STATUS_CREATED,
@@ -35,12 +36,7 @@ module.exports.logout = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(NOT_FOUND_MESSAGE);
       } else {
-        res.cookie('jwt', '', {
-          expires: new Date(0),
-          httpOnly: true,
-          sameSite: true,
-        });
-        res.status(200).send({ message: LOGOUT });
+        res.clearCookie('jwt').send({ message: LOGOUT });
       }
     })
     .catch(next);
@@ -95,7 +91,13 @@ module.exports.createUser = (req, res, next) => {
       delete userObject.password;
       res.status(STATUS_CREATED).send({ userObject });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequestError('Некорректные данные для регистрации пользователя'));
+      } else {
+        next(err);
+      }
+    });
 };
 
 function updateUser(toUpdate) {
@@ -110,7 +112,13 @@ function updateUser(toUpdate) {
         }
         return res.send({ user });
       })
-      .catch(next);
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          next(new BadRequestError('Некорректные данные для обновления пользователя'));
+        } else {
+          next(err);
+        }
+      });
   };
 }
 
