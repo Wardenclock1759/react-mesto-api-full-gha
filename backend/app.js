@@ -4,16 +4,12 @@ const { errors } = require('celebrate');
 const cookieParser = require('cookie-parser');
 const { PORT, MONGO_URL } = require('./config');
 const routes = require('./routes/index');
+const cors = require('./middlewares/cors');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const limiter = require('./middlewares/limiter');
 const NotFoundError = require('./errors/not-found-error');
 const { NOT_FOUND_MESSAGE } = require('./constants');
-
-const allowedCors = [
-  'https://mesto.wardenclock.nomoredomains.xyz',
-  'http://mesto.wardenclock.nomoredomains.xyz',
-];
 
 const app = express();
 app.use(express.json());
@@ -26,15 +22,7 @@ mongoose.connect(MONGO_URL, {
 
 app.use(limiter);
 
-app.use((req, res, next) => {
-  const { origin } = req.headers;
-  if (allowedCors.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', true);
-  }
-
-  next();
-});
+app.use(cors);
 
 app.use((req, res, next) => {
   const { method } = req;
