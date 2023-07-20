@@ -13,7 +13,6 @@ const { NOT_FOUND_MESSAGE } = require('./constants');
 const allowedCors = [
   'https://mesto.wardenclock.nomoredomains.xyz',
   'http://mesto.wardenclock.nomoredomains.xyz',
-  'localhost:3000',
 ];
 
 const app = express();
