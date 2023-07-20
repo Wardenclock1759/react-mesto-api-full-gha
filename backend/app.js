@@ -7,6 +7,7 @@ const { PORT, MONGO_URL } = require('./config');
 const routes = require('./routes/index');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const limiter = require('./middlewares/limiter');
 const NotFoundError = require('./errors/not-found-error');
 const { NOT_FOUND_MESSAGE } = require('./constants');
 
@@ -23,6 +24,8 @@ app.use(cookieParser());
 mongoose.connect(MONGO_URL, {
   useNewUrlParser: true,
 });
+
+app.use(limiter);
 
 app.use((req, res, next) => {
   const { origin } = req.headers;
