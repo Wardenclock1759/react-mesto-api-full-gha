@@ -4,6 +4,7 @@ const { JWT_SECRET } = require('../config');
 const User = require('../models/user');
 const NotFoundError = require('../errors/not-found-error');
 const BadRequestError = require('../errors/bad-request');
+const ConflictError = require('../errors/conflict');
 
 const {
   STATUS_CREATED,
@@ -92,7 +93,9 @@ module.exports.createUser = (req, res, next) => {
       res.status(STATUS_CREATED).send({ userObject });
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err.code === 11000) {
+        next(new ConflictError('Пользователь уже существует'));
+      } else if (err.name === 'ValidationError') {
         next(new BadRequestError('Некорректные данные для регистрации пользователя'));
       } else {
         next(err);
